@@ -15,8 +15,7 @@ maps.code-workspace
 
 # Archivos de configuración locales y secretos
 .env
-shopsmaps/settings/local.py
-shopsmaps/settings/production.py
+config/settings/local.py
 
 # Archivos de compilación de estáticos
 # Ignora los estáticos compilados en producción si usas un framework de front-end
@@ -34,5 +33,3 @@ shopsmaps/settings/production.py
 .coverage
 .pytest_cache/
 htmlcov/
-
-/deploy/
