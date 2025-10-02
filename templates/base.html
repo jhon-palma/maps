@@ -1,0 +1,45 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block title %}{{ title }} | Shopmaps{% endblock %}</title>
+        {% include "includes/head.html" %}
+        {% block head %}{% endblock %}
+    </head>
+  <body class="layout-fixed fixed-header sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      {% include "includes/header.html" %}
+      {% include "includes/sidebar.html" %}
+      <main class="app-main">
+        <!--begin::App Content Header-->
+        <div class="app-content-header">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">{{ section }}</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item">{{ module_name }}</li>
+                  <li class="breadcrumb-item active" aria-current="page"><a href="#">{{ group }}</a></li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+        </div>
+        <!--end::App Content Header-->
+         <div class="app-content">
+             {% block content %}{% endblock %}
+
+         </div>
+      
+    </main>
+      {% include "includes/footer.html" %}
+    </div>
+    {% include "includes/scripts.html" %}
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

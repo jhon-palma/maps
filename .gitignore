@@ -1,0 +1,38 @@
+# Archivos de caché y bytecode de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Directorio del entorno virtual
+# Reemplaza 'venv' por el nombre que le diste a tu entorno si es diferente
+venv/
+
+# Base de datos SQLite local
+db.sqlite3
+*.sqlite3-journal
+maps.code-workspace
+
+# Archivos de configuración locales y secretos
+.env
+shopsmaps/settings/local.py
+shopsmaps/settings/production.py
+
+# Archivos de compilación de estáticos
+# Ignora los estáticos compilados en producción si usas un framework de front-end
+# Por defecto, Django recomienda subir los archivos estáticos colectados
+/static/
+
+# Archivos multimedia subidos por los usuarios
+# Asegúrate de que este directorio exista y que Django lo use
+/media/
+
+# Archivos de macOS
+.DS_Store
+
+# Archivos de pruebas y reportes
+.coverage
+.pytest_cache/
+htmlcov/
+
+/deploy/

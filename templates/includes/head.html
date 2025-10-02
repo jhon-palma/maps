@@ -1,0 +1,83 @@
+  {% load static %}
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/png">
+    <!--begin::Accessibility Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <!--end::Accessibility Meta Tags-->
+    <!--begin::Primary Meta Tags-->
+    <meta name="title" content="AdminLTE 4 | Fixed Complete" />
+    <meta name="author" content="ColorlibHQ" />
+    <meta
+      name="description"
+      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance."
+    />
+    <meta
+      name="keywords"
+      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant"
+    />
+    <!--end::Primary Meta Tags-->
+    <!--begin::Accessibility Features-->
+    <!-- Skip links will be dynamically added by accessibility.js -->
+    <meta name="supported-color-schemes" content="light dark" />
+    
+    
+
+    <!--end::Accessibility Features-->
+    <!--begin::Fonts-->
+    <link
+      rel="stylesheet"
+      href="{% static 'lib/fontsource/source-sans-3/index.css' %}"
+      media="print"
+      onload="this.media='all'"
+    />
+    <!--end::Fonts-->
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link rel="stylesheet" href="{% static 'lib/overlayscrollbars/overlayscrollbars.min.css' %}">
+    
+    <!--end::Third Party Plugin(OverlayScrollbars)-->
+    <!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link rel="stylesheet" href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}">
+    <link
+      rel="stylesheet"
+      href="{% static 'lib/bootstrap-icons/bootstrap-icons.min.css' %}"
+    />
+    
+    <link rel="preload" href="{% static 'lib/adminlte/css/adminlte.css' %}" as="style" />
+    <!--end::Third Party Plugin(Bootstrap Icons)-->
+    <!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="{% static 'lib/adminlte/css/adminlte.css' %}" />
+    <!--end::Required Plugin(AdminLTE)-->
+    <style>
+        /* Para navegadores basados en WebKit (Chrome, Edge, Safari) */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Para Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+        .no-focus {
+            pointer-events: none;
+        }
+        .nav-treeview{
+            padding-left: 1rem !important;
+        }
+        .errorlist {
+            color: red;
+            margin-top: 5px;
+            list-style: none;
+            padding-left: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+
+		

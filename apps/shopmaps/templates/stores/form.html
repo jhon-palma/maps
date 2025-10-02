@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <style type="text/css">
+        #map_canvas {
+            width: 100%;
+            height: 250px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-success card-outline mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ group }}</h3>
+                    </div>
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="card-body">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if formset.non_form_errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ formset.non_form_errors }}
+                                </div>
+                            {% endif %}
+
+                            {% csrf_token %}
+                            <div id="clinic-finder" class="border">
+                                <div class="links"></div>
+                                <div id="map_canvas" class="newstore_map" data-address="{{ city }}, {{ country }}" data-icon="{% static 'img/marker.png' %}"></div>
+                                <div id="ajax_msg"></div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.address.label_tag }}
+                                        {{ form.address }}
+                                        {% if form.address.errors %}
+                                            <div class="text-danger small">{{ form.address.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.name.label_tag }}
+                                        {{ form.name }}
+                                        {% if form.name.errors %}
+                                            <div class="text-danger small">{{ form.name.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ form.projects.label_tag }}</label>
+                                        {% for checkbox in form.projects %}
+                                            <div class="form-check">
+                                                {{ checkbox.tag }}
+                                                <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                                    {{ checkbox.choice_label }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                        {% if form.projects.errors %}
+                                            <div class="text-danger small">{{ form.projects.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.state.label_tag }}
+                                        {{ form.state }}
+                                        {% if form.state.errors %}
+                                            <div class="text-danger small">{{ form.state.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.city.label_tag }}
+                                        {{ form.city }}
+                                        {% if form.city.errors %}
+                                            <div class="text-danger small">{{ form.city.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        {{ form.zip_code.label_tag }}
+                                        {{ form.zip_code }}
+                                        {% if form.zip_code.errors %}
+                                            <div class="text-danger small">{{ form.zip_code.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        {{ form.cat_id.label_tag }}
+                                        {{ form.cat_id }}
+                                        {% if form.cat_id.errors %}
+                                            <div class="text-danger small">{{ form.cat_id.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        {{ form.status_store.label_tag }}
+                                        {{ form.status_store }}
+                                        {% if form.status_store.errors %}
+                                            <div class="text-danger small">{{ form.status_store.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.image.label_tag }}
+                                        {{ form.image }}
+                                        {% if form.image.errors %}
+                                            <div class="text-danger small">{{ form.image.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.image1.label_tag }}
+                                        {{ form.image1 }}
+                                        {% if form.image1.errors %}
+                                            <div class="text-danger small">{{ form.image1.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.image2.label_tag }}
+                                        {{ form.image2 }}
+                                        {% if form.image2.errors %}
+                                            <div class="text-danger small">{{ form.image2.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.image3.label_tag }}
+                                        {{ form.image3 }}
+                                        {% if form.image3.errors %}
+                                            <div class="text-danger small">{{ form.image3.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.image4.label_tag }}
+                                        {{ form.image4 }}
+                                        {% if form.image4.errors %}
+                                            <div class="text-danger small">{{ form.image4.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        {{ form.mobile.label_tag }}
+                                        {{ form.mobile }}
+                                        {% if form.mobile.errors %}
+                                            <div class="text-danger small">{{ form.mobile.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="mb-3">
+                                        {{ form.pos_contact.label_tag }}
+                                        {{ form.pos_contact }}
+                                        {% if form.pos_contact.errors %}
+                                            <div class="text-danger small">{{ form.pos_contact.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.email.label_tag }}
+                                        {{ form.email }}
+                                        {% if form.email.errors %}
+                                            <div class="text-danger small">{{ form.email.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.distributor_1.label_tag }}
+                                        {{ form.distributor_1 }}
+                                        {% if form.distributor_1.errors %}
+                                            <div class="text-danger small">{{ form.distributor_1.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.distributor_2.label_tag }}
+                                        {{ form.distributor_2 }}
+                                        {% if form.distributor_2.errors %}
+                                            <div class="text-danger small">{{ form.distributor_2.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.nombre_tendero.label_tag }}
+                                        {{ form.nombre_tendero }}
+                                        {% if form.nombre_tendero.errors %}
+                                            <div class="text-danger small">{{ form.nombre_tendero.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        {{ form.description.label_tag }}
+                                        {{ form.description }}
+                                        {% if form.description.errors %}
+                                            <div class="text-danger small">{{ form.description.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.latitude.label_tag }}
+                                        {{ form.latitude }}
+                                        {% if form.latitude.errors %}
+                                            <div class="text-danger small">{{ form.latitude.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ form.longitude.label_tag }}
+                                        {{ form.longitude }}
+                                        {% if form.longitude.errors %}
+                                            <div class="text-danger small">{{ form.longitude.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="formset-container">
+                                {{ formset.management_form }}
+                                {% for f in formset %}
+                                    <div class="form-row formset-row">
+                                         <div class="row g-3 align-items-stretch">
+                                            <div class="col">
+                                                {% for hidden in f.hidden_fields %}
+                                                    {{ hidden }}
+                                                {% endfor %}
+                                                <div class="row g-3"> 
+                                                    <div class="col-md-5">
+                                                        {{ f.file.label_tag }}
+                                                        {{ f.file }}
+                                                        {% if f.instance.pk and f.instance.file %}
+                                                            <div class="mb-2">
+                                                                <img src="{{ f.instance.file.url }}" alt="{{ f.instance.name }}" 
+                                                                    class="img-thumbnail" width="120">
+                                                            </div>
+                                                        {% endif %}
+                                                        {% if f.file.errors %}
+                                                            <div class="text-danger small">{{ f.file.errors }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            {{ f.points.label_tag }}
+                                                            {{ f.points }}
+                                                            {% if f.points.errors %}
+                                                                <div class="text-danger small">{{ f.points.errors }}</div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-auto d-flex justify-content-center align-items-center">
+                                                        {{ f.DELETE.as_hidden }}
+                                                        <button type="button" class="btn btn-sm btn-outline-danger delete-form">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <button type="button" id="add-form" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-plus-circle"></i> Agregar imagen
+                            </button>
+                        </div>
+                        <div class="card-footer mt-3">
+                            <button type="submit" class="btn btn-success px-5"><i class="bi bi-floppy"></i> Guardar</button>
+                            <a href="{{ list_url }}" class="btn btn-danger px-5"><i class="bi bi-x-lg"></i> Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgigvXBOsGg4WoV5818c7Upo1jUDDvBEo&libraries=places"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{% static 'lib/formset/jquery.formset.js' %}"></script>
+
+    <script src="{% static 'js/map_handler.js' %}"></script>
+    <script src="{% static 'js/state_city_handler.js' %}"></script>
+    <script src="{% static 'js/formset_handler.js' %}"></script>
+{% endblock %}

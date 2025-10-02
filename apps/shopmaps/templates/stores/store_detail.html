@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+    <style type="text/css">
+        #map_canvas {
+            width: 100%;
+            height: 250px;
+        }
+        .fixed-height-carousel {
+            height: 400px; /* Ajusta el alto como prefieras */
+            overflow: hidden;
+            position: relative;
+        }
+        .fixed-height-carousel .carousel-item {
+            height: 100%;  /* cada slide ocupa todo el alto */
+            position: relative;
+        }
+        .carousel-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-size: 100% 100%; /* Se estira (puede distorsionar) */
+            background-position: center;
+            filter: blur(10px) brightness(0.6); /* Desenfoque y oscurecido */
+            z-index: 1;
+        }
+        .carousel-img {
+            height: 100%;
+            width: auto;          /* Mantiene proporción */
+            max-width: 100%;
+            object-fit: contain;  /* Ajusta al alto sin recortar */
+            position: relative;
+            z-index: 2;
+            display: block;
+            margin: 0 auto;       /* Centrar si no llena todo el ancho */
+        }
+        .carousel-indicators.always-visible {
+            bottom: 10px;           /* un poco separado del borde */
+            z-index: 3;             /* encima del fondo y de la imagen */
+        }
+        .carousel-indicators button {
+            background-color: #fff;   /* puntos blancos */
+            border: 1px solid #000;   /* borde para que se vean en fotos claras */
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            opacity: 0.9;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-success card-outline mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">{{ group }}</h3>
+                    </div>
+                     <div class="card-body p-2">
+                        <div class="p-2">
+                            <div id="clinic-finder" class="border">
+                                <div class="links"></div>
+                                <div id="map_canvas" class="newstore_map" data-address="{{ city }}, {{ country }}" data-icon="{% static 'img/marker.png' %}" data-store="{{ store.name }}" data-store-address="{{ store.address }}">
+                                </div>
+                                <div id="ajax_msg"></div>
+                            </div>
+                             <div class="store-header my-3">
+                                <h3 class="mb-0">{{ store.name }}</h3>
+                                <p class="mb-0"><strong>{{ store.address }}</strong></p>
+                                <p class="text-muted small mb-2">{{ store.city }} - {{ store.city.state }}</p>
+                            </div>
+                            <div class="container-fluid px-5">
+                                {% if images %}
+                                    {% if images|length > 1 %}
+                                        <!-- Carrusel con varias imágenes -->
+                                        <div id="storeCarousel" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-indicators always-visible">
+                                                {% for img in images %}
+                                                    <button type="button" data-bs-target="#storeCarousel" 
+                                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                                            {% if forloop.first %}class="active"{% endif %}
+                                                            aria-label="Imagen {{ forloop.counter }}"></button>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="carousel-inner fixed-height-carousel">
+                                                {% for img in images %}
+                                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                        <div class="carousel-bg" style="background-image: url('{{ img.file.url }}');"></div>
+                                                        <img src="{{ img.file.url }}" class="carousel-img" alt="{{ img.name }}">
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#storeCarousel" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#storeCarousel" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    {% else %}
+                                        <!-- Solo una imagen -->
+                                        <div class="single-image text-center fixed-height-carousel position-relative">
+                                            <div class="carousel-bg" style="background-image: url('{{ images.0.file.url }}');"></div>
+                                            <img src="{{ images.0.file.url }}" class="carousel-img" alt="{{ images.0.name }}">
+                                            <p class="small text-muted mt-1 position-absolute bottom-0 start-50 translate-middle-x bg-dark bg-opacity-50 text-white px-2 rounded">
+                                            </p>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <!-- Imagen por defecto -->
+                                    <div class="text-center fixed-height-carousel position-relative">
+                                        <div class="carousel-bg" style="background-image: url('{% static 'img/imagenGenerica.png' %}');"></div>
+                                        <img src="{% static 'img/imagenGenerica.png' %}" class="carousel-img" alt="Sin imagen">
+                                        <p class="text-muted small mt-1 position-absolute bottom-0 start-50 translate-middle-x bg-dark bg-opacity-50 text-white px-2 rounded">
+                                            No hay imágenes para esta tienda
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <input type="hidden" name="latitude" value="{{ store.latitude }}" class="form-control" maxlength="255" id="id_latitude">
+                        <input type="hidden" name="longitude" value="{{ store.longitude }}" class="form-control" maxlength="255" id="id_longitude">
+                        <input type="hidden" name="longitude" value="{{ detail }}" class="form-control" maxlength="255" id="detail">
+                    </div>
+                    <div class="card-footer mt-3">
+                        <div class="d-flex justify-content-between my-3">
+                            {% if prev_store %}
+                                <a href="{% url 'maps:store_detail' prev_store.id %}" class="btn btn-outline-primary px-5"><i class="bi bi-arrow-left"></i> Anterior</a>
+                            {% else %}
+                                <span></span>
+                            {% endif %}
+                            <a href="{{ list_url }}" class="btn btn-outline-secondary px-5">Volver</a>
+                            {% if next_store %}
+                                <a href="{% url 'maps:store_detail' next_store.id %}" class="btn btn-outline-primary px-5">Siguiente <i class="bi bi-arrow-right"></i></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgigvXBOsGg4WoV5818c7Upo1jUDDvBEo&libraries=places"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{% static 'lib/formset/jquery.formset.js' %}"></script>
+
+    <script src="{% static 'js/map_handler.js' %}"></script>
+    <script src="{% static 'js/state_city_handler.js' %}"></script>
+    <script src="{% static 'js/formset_handler.js' %}"></script>
+{% endblock %}
