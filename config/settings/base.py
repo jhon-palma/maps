@@ -24,6 +24,7 @@ THIRD_PARTY_APPS =[
 
 LOCAL_APPS = [
     'apps.shopmaps',
+    'apps.accounts',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -116,8 +117,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = '/dashboard/' 
-LOGOUT_REDIRECT_URL = 'login' 
-
+LOGOUT_REDIRECT_URL = '/accounts/login/'
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 GEOIP_PATH = os.path.join(BASE_DIR, "geoip")

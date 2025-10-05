@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% for key, value in image_counts.items %}
+                <div class="col-lg-2 col-6">
+                    {% if key == 'image' %}
+                        <div class="small-box text-bg-primary">
+                            <div class="inner">
+                                <h3>{{ value }}</h3>
+                                <p>Posters</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-card-image small-box-icon" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
+                            </svg>
+                        </div>
+                    {% elif key == 'image1' %}
+                        <div class="small-box text-bg-success">
+                            <div class="inner">
+                                <h3>{{ value }}</h3>
+                                <p>5*5 Sticker</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-card-image small-box-icon" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
+                            </svg>
+                        </div>
+                    {% elif key == 'image2' %}
+                        <div class="small-box text-bg-warning">
+                            <div class="inner">
+                                <h3>{{ value }}</h3>
+                                <p>8*8 Sticker</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-card-image small-box-icon" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
+                            </svg>
+                        </div>
+                    {% elif key == 'image3' %}
+                        <div class="small-box text-bg-danger">
+                            <div class="inner">
+                                <h3>{{ value }}</h3>
+                                <p>Flange</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-card-image small-box-icon" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
+                            </svg>
+                        </div>
+                    {% elif key == 'image4' %}
+                        <div class="small-box text-bg-info">
+                            <div class="inner">
+                                <h3>{{ value }}</h3>
+                                <p>Colgarin</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-card-image small-box-icon" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
+                            </svg>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-lg-7 connectedSortable">
+                <div class="card mb-4">
+                    <div class="card-header"><h3 class="card-title">Tiendas por ciudad</h3></div>
+                    <div class="card-body"><div id="revenue-chart"></div></div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Tiendas por Categoria</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12"><div id="pie-chart"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 connectedSortable">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Tiendas últimos 5 días</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12"><div id="line-chart"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{{ stores_by_day|json_script:"stores_by_day" }}
+    <script
+      src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
+      integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
+      crossorigin="anonymous"
+    ></script>
+<script>
+    // Tiendas por ciudad
+    const cityLabels = {{ stores_by_city|pluck:"city__name"|safe }};
+    const cityData = {{ stores_by_city|pluck:"total"|safe }};
+    
+    const sales_chart_options = {
+        series: [{
+          name: 'Tiendas',
+          data: cityData
+        }],
+        chart: {
+          height: 350,
+          type: 'bar',
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 10,
+            dataLabels: {
+              position: 'top', // top, center, bottom
+            },
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          offsetY: -20,
+          style: {
+            fontSize: '12px',
+            colors: ["#304758"]
+          }
+        },
+        xaxis: {
+          categories: cityLabels,
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          crosshairs: {
+            fill: {
+              type: 'gradient',
+              gradient: {
+                colorFrom: '#D8E3F0',
+                colorTo: '#BED1E6',
+                stops: [0, 100],
+                opacityFrom: 0.4,
+                opacityTo: 0.5,
+              }
+            }
+          },
+          tooltip: {
+            enabled: true,
+          }
+        },
+        yaxis: {
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          },
+          labels: {
+            show: false,
+          }
+        
+        },
+    };
+    const sales_chart = new ApexCharts(
+        document.querySelector('#revenue-chart'),
+        sales_chart_options,
+    );
+    sales_chart.render();
+
+    // Tiendas por categoria
+    const categoryLabels = {{ stores_by_category|pluck:"cat_id__cat_name"|safe }};
+    const categoryData = {{ stores_by_category|pluck:"total"|safe }};
+
+    const category_chart_options = {
+        series: categoryData,
+            chart: {
+            height: 350,
+            type: 'donut',
+        },
+        labels: categoryLabels,
+        plotOptions: {
+            pie: {
+                startAngle: -90,
+                endAngle: 270
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        fill: {
+            type: 'gradient',
+        },
+        legend: {
+            show: true,
+            position: 'right',
+            horizontalAlign: 'center',
+            formatter: function(val, opts) {
+                return val + " - " + opts.w.globals.series[opts.seriesIndex]
+            }
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+
+    const category_chart = new ApexCharts(
+        document.querySelector('#pie-chart'),
+        category_chart_options,
+    );
+    category_chart.render();
+
+    // Tiendas últimos 5 días
+    const storesByDay = JSON.parse(document.getElementById('stores_by_day').textContent);
+    const dayLabels = storesByDay.map(item => item.day);
+    const dayData   = storesByDay.map(item => item.total);
+
+    var day_chart_options = {
+          series: [{
+            name: "Tiendas",
+            data: dayData 
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: true
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: dayLabels,
+        }
+        };
+
+        const day_chart = new ApexCharts(
+            document.querySelector('#line-chart'),
+            day_chart_options,
+        );
+        day_chart.render();
+</script>
+{% endblock %}

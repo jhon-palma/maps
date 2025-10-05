@@ -42,7 +42,7 @@ class Project(models.Model):
 
 class StoreProject(models.Model):
     store = models.ForeignKey('Stores', on_delete=models.CASCADE, blank=True, null=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT, blank=True, null=True)
 
 
 class Stores(models.Model):
@@ -64,12 +64,12 @@ class Stores(models.Model):
     longitude = models.CharField(max_length=255, blank=True, null=True)
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='Ciudad')
+    city = models.ForeignKey(City, on_delete=models.PROTECT, verbose_name='Ciudad')
     zip_code = models.CharField(max_length=255)
-    cat_id = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    cat_id = models.ForeignKey(Categories, on_delete=models.PROTECT)
     status_store = models.CharField(max_length=20, choices=STATUS_STORE_CHOICES, default="branding", verbose_name="Estado de la tienda")
     status = models.BooleanField(default=True)
-    temporada = models.CharField(max_length=255)
+    temporada = models.CharField(max_length=255, blank=True, null=True)
     image = models.CharField(max_length=2, choices=IMAGES_COUNT, default="0", verbose_name="Imagenes Posters")
     image1 = models.CharField(max_length=2, choices=IMAGES_COUNT, default="0", verbose_name="Imagenes 5*5 Sticker")
     image2 = models.CharField(max_length=2, choices=IMAGES_COUNT, default="0", verbose_name="Imagenes 8*8 Sticker")
@@ -89,9 +89,9 @@ class Stores(models.Model):
     approved = models.IntegerField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
-    # created_by = models.ForeignKey('Users', models.DO_NOTHING, db_column='created_by', blank=True, null=True)
+    created_by = models.ForeignKey( "accounts.CustomUser", on_delete=models.PROTECT, related_name="stores", blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
-    # updated_by = models.ForeignKey('Users', models.DO_NOTHING, db_column='updated_by', related_name='stores_updated_by_set', blank=True, null=True)
+    updated_by = models.ForeignKey("accounts.CustomUser", on_delete=models.PROTECT, related_name='stores_updated_by_set', blank=True, null=True)
     nombre_tendero = models.CharField(max_length=180, blank=True, null=True)
 
 @receiver(pre_save, sender=Stores)
@@ -136,8 +136,8 @@ def store_image_upload_path(instance, filename):
 
 
 class Images(models.Model):
-    name = models.CharField(max_length=100)
-    file = models.ImageField(upload_to=store_image_upload_path, blank=True, null=True)
+    name = models.CharField(max_length=120)
+    file = models.ImageField(upload_to=store_image_upload_path, max_length=255, blank=True, null=True)
     points = models.IntegerField(blank=True, null=True)
     store = models.ForeignKey(Stores, on_delete=models.CASCADE, related_name="images")
 

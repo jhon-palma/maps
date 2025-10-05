@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'lib/datatables/datatables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/datatables/dataTables.bootstrap5.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/adminlte/css/adminlte.css' %}" />
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">{{ title }}</h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <div class="p-2">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <table id="users" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Usuario</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Tipo de Usuario</th>
+                            <th class="text-center">Último inicio de sesión</th>
+                            <th class="text-center">Estado del usuario</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in usuarios %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.get_role_display }}</td>
+                            <td>{{ user.last_login|date:"d/m/Y H:i" }}</td>
+                            <td class="text-center">{% if user.is_active %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactivo</span>
+                                {% endif %}
+                            <td>
+                                <a href="{% url 'edit_user' user.id %}" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'edit_user' user.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-key-fill"></i></a>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{ user.id }}')"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No hay usuarios registrados</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'create_user' %}" class="btn btn-success px-5">
+                    <i class="bi bi-plus-lg"></i> Crear Usuario
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/dataTables.bootstrap5.js' %}"></script>
+    <script src="{% static 'lib/sweetalert2/sweetalert2.all.js' %}"></script>
+    <script>
+        new DataTable(
+            '#users',
+            {
+                responsive: true,
+                autoWidth: false,
+                language:{
+                    infoEmpty: 'Aún no hay productos registrados.',
+                    infoFiltered: '(filtrado de un total de _MAX_ registros)',
+                    lengthMenu: 'Ver _MENU_ registros por página',
+                    zeroRecords: 'No se ha encontrado nada, lo sentimos.',
+                    search: "Buscar:",
+                    emptyTable: "No hay datos disponibles en la tabla.",
+                    loadingRecords: "Cargando...",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    infoEmpty: "Mostrando 0 a 0 de 0 entradas",
+                }
+            }
+        );
+        function confirmDelete(userId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir esta acción",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/accounts/users/${userId}/delete/`;
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
+
+
+

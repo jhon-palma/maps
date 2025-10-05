@@ -25,6 +25,7 @@ config/settings/local.py
 # Archivos multimedia subidos por los usuarios
 # Asegúrate de que este directorio exista y que Django lo use
 /media/
+/staticfiles/
 
 # Archivos de macOS
 .DS_Store

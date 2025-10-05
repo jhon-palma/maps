@@ -1,13 +1,37 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa de Tiendas</title>
-</head>
-<body>
-    <h1>¡Bienvenido a Shopsmaps!</h1>
-    <p>Este es el índice de la aplicación de tiendas.</p>
-    <a href="{% url 'maps:stores_list' %}" target="_blank" rel="noopener noreferrer">Tiendas</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">{{ title }}</h3>
+            </div>
+            <div class="card-body">
+                <div class="p-2">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <a href="#" class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover text-decoration-none">
+                        <h1 class="mb-0">¡Bienvenido a <img src="{% static 'img/logo-ace.png'%}" alt="ACE Shops"><b> Shops!</b></h1>
+                    </a>
+                </div>
+                <hr>
+                {% if request.user.role == "admin" or request.user.role == "operador" %}
+                    <a href="{% url 'maps:store_create' %}" class="btn btn-primary mb-2 px-5" role="button">
+                        <i class="bi bi-building-add"></i>
+                        Crear Tienda
+                    </a>
+                {% endif %}
+                <a href="{% url 'maps:stores_list' %}" class="btn btn-success mb-2 px-5" role="button">
+                    <i class="bi bi-building-add"></i>
+                    Ver tiendas
+                </a>
+                <a href="{% url 'maps:maps' %}" class="btn btn-warning mb-2 px-5 text-white" role="button">
+                    <i class="bi bi-pin-map-fill"></i>
+                    Ver mapa
+                </a>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <style type="text/css">
+        #map_canvas {
+            width: 100%;
+            height: 250px;
+        }
+    </style>
+    <meta name="csrf-token" content="{% csrf_token %}">
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">{{ title }}</h3>
+            </div>
+            <div class="card-body p-2">
+                <div class="p-2">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <form method="post" accept-charset="UTF-8" method="post" id="clinic-finder-form" class="clear-block row">
+                    <div class="col-lg-6 " id="edit-gmap-address-wrapper">
+                        <label for="" class="form-label">Por favor, introduzca una ubicación</label>
+                        <input type="text" maxlength="128" name="address" id="address" size="60" value="" class="form-text form-control form-control-sm" autocomplete="off" />
+                    </div>
+                    <div class="col-lg-6 " id="edit-products-wrapper">
+                        <label for="" class="form-label">Categoría</label>
+                        <select name="products" class="form-select form-select-sm" id="edit-products">
+                            <option value="">Todas las categorías</option>
+                            {% for category in categories %}
+                                <option value="{{ category.pk }}">{{ category.cat_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <input type="submit" name="op" id="edit-submit" value="Encontrar" class="btn btn-primary"/>
+                        <input  name="form_build_id" id="form-0168068fce35cf80f346d6c1dbd7344e" value="form-0168068fce35cf80f346d6c1dbd7344e"  />
+                        <input  name="form_id" id="edit-clinic-finder-form" value="clinic_finder_form"  />
+                    </div>
+                </form>
+                <div id="stores-maps" class="border">
+                    <div class="links"></div>
+                    <div id="map_canvas" class="newstore_map" data-icon="{% static 'img/marker.png' %}"></div>
+                </div>
+                <div id="ajax_msg"></div>
+                <div id="results">
+                    <h2 class="title-bg" style="padding-bottom:10px !important; ">
+                        <input type="radio" id="distance" name="distance" value="50" onChange="cachesearch = ''; $('#clinic-finder-form').submit();"> 50 <div class="radius-distance" style="display:inline;">km</div>
+                        <input type="radio" id="distance" name="distance" value="100" checked  onChange="cachesearch = ''; $('#clinic-finder-form').submit();"> 100 <div class="radius-distance"  style="display:inline;">km</div>
+                    </h2>
+                    <p class="distance-units">
+                        <label class="km" units="km">
+                            <input type="radio" name="distance-units" value="kms"/>KM
+                        </label>
+                        <label class="miles unchecked" checked="unchecked" units="miles">
+                            <input type="radio" name="distance-units" value="miles" />Miles
+                        </label>
+                    </p>
+                    <ol style="display: block; " id="list"></ol>
+                </div>
+{% endblock %}
+{% block scripts %}
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgigvXBOsGg4WoV5818c7Upo1jUDDvBEo&callback=initMap"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{% static 'lib/formset/jquery.formset.js' %}"></script>
+
+    <script src="{% static 'js/maps_stores.js' %}"></script>
+
+{% endblock %}

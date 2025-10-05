@@ -1,12 +1,18 @@
+from django.db.models import ProtectedError
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
+from config.decorators.role_required import role_required
 from apps.shopmaps.forms.categories import CategoryForm
 from apps.shopmaps.models.stores import Categories
 
-# Vista para listar las categorías
+
+@role_required(["admin"])
 def category_list(request):
+    """Muestra el listado de categorías de tiendas."""
     categories = Categories.objects.all()
+    
     context = {
         'categories': categories,
         'title': "Categorias",
@@ -17,15 +23,17 @@ def category_list(request):
     }
     return render(request, 'categories/list.html', context)
 
-# Vista para crear una nueva categoría
+
+@role_required(["admin"])
 def category_create(request):
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('maps:category_list')  # Redirige a la lista de categorías
-    else:
-        form = CategoryForm()
+    """Crea una nueva categoría de tienda."""
+    form = CategoryForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Categoría creada correctamente.")
+        return redirect('maps:category_list')
+    
     context = {
         'form': form,
         'title': "Categorias",
@@ -36,16 +44,18 @@ def category_create(request):
     }
     return render(request, 'categories/form.html', context)
 
-# Vista para editar una categoría
+
+@role_required(["admin"])
 def category_edit(request, pk):
+    """Edita una categoría existente."""
     category = get_object_or_404(Categories, pk=pk)
-    if request.method == 'POST':
-        form = CategoryForm(request.POST, instance=category)
-        if form.is_valid():
-            form.save()
-            return redirect('maps:category_list')  # Redirige a la lista de categorías
-    else:
-        form = CategoryForm(instance=category)
+    form = CategoryForm(request.POST or None, instance=category)
+    
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Categoría actualizada correctamente.")
+        return redirect('maps:category_list')
+
     context = {
         'form': form,
         'title': "Categorias",
@@ -56,10 +66,26 @@ def category_edit(request, pk):
     }
     return render(request, 'categories/form.html', context)
 
-# Vista para eliminar una categoría
+
+@role_required(["admin"])
 def category_delete(request, pk):
+    """Elimina una categoría si no tiene tiendas asociadas."""
     category = get_object_or_404(Categories, pk=pk)
+    
     if request.method == 'POST':
-        category.delete()
-        return redirect('category_list')  # Redirige a la lista de categorías
-    return render(request, 'mi_app/category_confirm_delete.html', {'category': category})
+        try:
+            category.delete()
+            messages.success(request, "Categoría eliminada correctamente.")
+        except ProtectedError:
+            messages.error(request, "No se puede eliminar: hay tiendas asociadas a esta categoría.")
+        return redirect('maps:category_list')
+    
+    context = {
+        'object': category,
+        'title': "Categorias",
+        'module_name':'Tiendas',
+        'section': 'Categorias de Tiendas',
+        'list_url': reverse_lazy('maps:category_list'),
+        'group': 'Eliminar categoria',
+    }
+    return render(request, 'categories/delete.html', context)

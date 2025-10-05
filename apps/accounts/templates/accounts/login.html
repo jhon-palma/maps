@@ -1,0 +1,26 @@
+{% extends 'base_registration.html' %}
+
+{% block content %}
+   <div class="p-2">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <p class="login-box-msg fs-4">Ingresar</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Usuario:</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="form-group mb-2">
+             <label>Contraseña:</label>
+             <input type="password" name="password" class="form-control" required>
+        </div>
+        <button class="btn btn-primary px-5" type="submit">Ingresar</button>
+    </form>
+{% endblock %}

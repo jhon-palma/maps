@@ -4,16 +4,11 @@
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
-          <a href="#" class="brand-link">
+          <a href="{% url 'maps:index' %}" class="brand-link link-light">
             <!--begin::Brand Image-->
-            {% if company and company.logo %}
-                <img src="{{ company.logo.url }}" alt="Logo {{ company.name }}" class="brand-image opacity-75 shadow">
-            {% else %}
-                <img src="{% static 'lib/adminlte/assets/img/AdminLTELogo.png' %}" alt="{{ company.name|default:'Logo de la empresa' }}" class="brand-image opacity-75 shadow"/>
-            {% endif %}
+            <img src="{% static 'img/logo-ace.png'%}" alt="ACE Shops" class="brand-image opacity-75 shadow"/>&nbsp;&nbsp;<b>Shops</b>
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light"> {{ company.name|default:"Nombre de la empresa" }}</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -32,33 +27,33 @@
               id="navigation"
             >
             {% with request.resolver_match.url_name as current_url %}
-            
-              <li class="nav-item {% if current_url in 'category_list projects_list project_create' %}menu-open{% endif %}">
-                <a href="#" class="nav-link {% if current_url in 'category_list' %}active{% endif %}">
-                  <i class="nav-icon bi bi-gear-fill"></i>
-                  <p>
-                    Configuración
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{% url 'maps:category_list'  %}" class="nav-link {% if current_url in 'category_list category_create' %}active{% endif %}">
-                            <i class="nav-icon bi bi-tags-fill"></i>
-                            <p>Categorias</p>
+                {% if request.user.role == "admin" %}
+                    <li class="nav-item {% if current_url in 'category_list projects_list project_create' %}menu-open{% endif %}">
+                        <a href="#" class="nav-link {% if current_url in 'category_list' %}active{% endif %}">
+                        <i class="nav-icon bi bi-gear-fill"></i>
+                        <p>
+                            Configuración
+                            <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{% url 'maps:category_list'  %}" class="nav-link {% if current_url in 'category_list category_create' %}active{% endif %}">
+                                    <i class="nav-icon bi bi-tags-fill"></i>
+                                    <p>Categorias</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'maps:projects_list'  %}" class="nav-link {% if current_url in 'projects_list project_create project_edit' %}active{% endif %}">
+                                    <i class="bi bi-briefcase-fill"></i>
+                                    <p>Proyectos</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="{% url 'maps:projects_list'  %}" class="nav-link {% if current_url in 'projects_list project_create project_edit' %}active{% endif %}">
-                            <i class="bi bi-briefcase-fill"></i>
-                            <p>Proyectos</p>
-                        </a>
-                    </li>
-                </ul>
-              </li>
-
+                {% endif %}
               <li class="nav-item {% if current_url in 'stores_list store_create store_edit store_delete' %}menu-open{% endif %}">
-                <a href="#" class="nav-link {% if current_url in 'stores_list store_edit' %}active{% endif %}">
+                <a href="#" class="nav-link {% if current_url in 'stores_list store_edit store_create' %}active{% endif %}">
                   <i class="nav-icon bi bi-shop"></i>
                   <p>
                     Tiendas
@@ -66,12 +61,14 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{% url 'maps:store_create' %}" class="nav-link {% if current_url in 'store_create' %}active{% endif %}">
-                            <i class="bi bi-building-add"></i>
-                            <p>Crear Tienda</p>
-                        </a>
-                    </li>
+                    {% if request.user.role == "admin" or request.user.role == "operador" %}
+                        <li class="nav-item">
+                            <a href="{% url 'maps:store_create' %}" class="nav-link {% if current_url in 'store_create' %}active{% endif %}">
+                                <i class="bi bi-building-add"></i>
+                                <p>Crear Tienda</p>
+                            </a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a href="{% url 'maps:stores_list' %}" class="nav-link {% if current_url in 'stores_list' %}active{% endif %}">
                             <i class="bi bi-list-check"></i>
@@ -80,18 +77,20 @@
                     </li>
                 </ul>
               </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi-file-bar-graph-fill"></i>
-                  <p>Reportes</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link {% if current_url in 'user_list' %}active{% endif %}">
-                  <i class="nav-icon bi bi-person-fill-gear"></i>
-                  <p>Usuarios</p>
-                </a>
-              </li>
+                {% if request.user.role == "admin"%}
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                        <i class="nav-icon bi-file-bar-graph-fill"></i>
+                        <p>Reportes</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'users_list' %}" class="nav-link {% if current_url in 'user_list' %}active{% endif %}">
+                        <i class="nav-icon bi bi-person-fill-gear"></i>
+                        <p>Usuarios</p>
+                        </a>
+                    </li>
+                {% endif %}
             {% endwith %}
             </ul>
             <!--end::Sidebar Menu-->

@@ -1,0 +1,27 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{% block title %}{{ title }} | ACE Shop{% endblock %}</title>
+        {% include "includes/head.html" %}
+        {% block head %}{% endblock %}
+    </head>
+    <body class="login-page bg-body-secondary">
+        <div class="login-box">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <a href="#" class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover text-decoration-none">
+                        <h1 class="mb-0"><img src="{% static 'img/logo-ace.png'%}" alt="ACE Shops"><b> Shops</b></h1>
+                    </a>
+                </div>
+                <div class="card-body login-card-body">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+        </div>
+        {% include "includes/scripts.html" %}
+        {% block scripts %}{% endblock %}
+    </body>
+</html>
