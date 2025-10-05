@@ -27,7 +27,7 @@ def category_list(request):
 @role_required(["admin"])
 def category_create(request):
     """Crea una nueva categoría de tienda."""
-    form = CategoryForm(request.POST or None)
+    form = CategoryForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -49,7 +49,7 @@ def category_create(request):
 def category_edit(request, pk):
     """Edita una categoría existente."""
     category = get_object_or_404(Categories, pk=pk)
-    form = CategoryForm(request.POST or None, instance=category)
+    form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
     
     if request.method == "POST" and form.is_valid():
         form.save()

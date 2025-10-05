@@ -2,6 +2,7 @@ from django import forms
 
 from apps.shopmaps.models.stores import Categories
 
+
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Categories

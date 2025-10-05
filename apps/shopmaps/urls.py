@@ -31,7 +31,10 @@ urlpatterns = [
 
     path("ajax/load-cities/", cities.load_cities, name="ajax_load_cities"),
 
+    # Reportes
     path('dashboard/', reports.stores_dashboard, name='stores_dashboard'),
+    path("reports/", reports.reports, name="reports"),
+    path("reports/report-general/", reports.report_general_csv, name="report_general"),
 
 
 ]

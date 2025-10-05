@@ -1,13 +1,14 @@
-from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.db.models import ProtectedError
-from apps.accounts.forms.users import AdminUserChangeForm, AdminUserCreationForm
-from apps.accounts.models.accounts import CustomUser
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+
+from apps.accounts.forms.users import AdminPasswordResetForm, AdminUserChangeForm, AdminUserCreationForm
+from apps.accounts.models.accounts import CustomUser
+from config.decorators.role_required import role_required
 
 
 def login_view(request):
@@ -42,8 +43,12 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
-@login_required
+
+@role_required(["admin"])
 def users_list(request):
+    """
+    Vista para ver listado de usuarios.
+    """
     usuarios = CustomUser.objects.all().order_by("-modified")
     context = {
         'title': "Usuarios",
@@ -54,12 +59,12 @@ def users_list(request):
     }
     return render(request, "accounts/list.html", context)
 
-@login_required
-def create_user(request):
-    # Solo un administrador puede crear usuarios
-    # if request.user.role != "admin":
-    #     return HttpResponseForbidden("No tienes permiso para crear usuarios")
 
+@role_required(["admin"])
+def create_user(request):
+    """
+    Vista para crear usuarios.
+    """
     if request.method == "POST":
         form = AdminUserCreationForm(request.POST)
         if form.is_valid():
@@ -81,11 +86,12 @@ def create_user(request):
     }
     return render(request, "accounts/form.html", context)
 
-@login_required
-def edit_user(request, user_id):
-    # if request.user.role != "admin":
-    #     return HttpResponseForbidden("No tienes permiso para editar usuarios")
 
+@role_required(["admin"])
+def edit_user(request, user_id):
+    """
+    Vista para editar usuarios.
+    """
     user_obj = get_object_or_404(CustomUser, id=user_id)
 
     if request.method == "POST":
@@ -110,11 +116,12 @@ def edit_user(request, user_id):
     }
     return render(request, "accounts/form.html", context)
 
-@login_required
-def delete_user(request, user_id):
-    if request.user.role != "admin":
-        return HttpResponseForbidden("No tienes permiso para eliminar usuarios")
 
+@role_required(["admin"])
+def delete_user(request, user_id):
+    """
+    Vista para eliminar usuarios.
+    """
     user_obj = get_object_or_404(CustomUser, id=user_id)
 
     try:
@@ -124,3 +131,33 @@ def delete_user(request, user_id):
         messages.error(request, "❌ No se puede eliminar este usuario porque tiene datos asociados (ejemplo: tiendas creadas).")
 
     return redirect("users_list")
+
+
+@role_required(["admin"])
+def reset_user_password(request, user_id):
+    """
+    Permite a un administrador restablecer la contraseña de un usuario.
+    """
+    user_obj = get_object_or_404(CustomUser, id=user_id)
+
+    if request.method == "POST":
+        form = AdminPasswordResetForm(user_obj, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"✅ Contraseña del usuario {user_obj.username} actualizada correctamente.")
+            return redirect("users_list")
+        else:
+            messages.error(request, "❌ Hubo un error al actualizar la contraseña. Verifica los campos.")
+    else:
+        form = AdminPasswordResetForm(user_obj)
+
+    context = {
+        'title': "Restablecer Contraseña",
+        'module_name': 'Usuarios',
+        'section': f"Restablecer contraseña de {user_obj.username}",
+        'group': 'Resetear contraseña',
+        'form': form,
+        'user_obj': user_obj,
+    }
+
+    return render(request, "accounts/password_reset.html", context)

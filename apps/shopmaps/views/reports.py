@@ -3,6 +3,9 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.shortcuts import render
 from django.utils.timezone import now
+import csv
+from django.http import HttpResponse
+from django.utils import timezone
 
 from apps.shopmaps.models.stores import Stores
 from config.decorators.role_required import role_required
@@ -56,3 +59,75 @@ def stores_dashboard(request):
         'stores_by_day': list(stores_by_day),
     }
     return render(request, 'reports/dashboard.html', context)
+
+
+@role_required(["admin"])
+def reports(request):
+    context = {
+        'title': 'Reportes',
+        'module_name':'Tiendas',
+        'section': 'Reportes',
+        'group': 'Reportes',
+    }
+    return render(request, 'reports/reports.html', context)
+
+
+@role_required(["admin"])
+def report_general_csv(request):
+    """
+    Genera un reporte CSV con la lista de tiendas registradas.
+    """
+    # Definir el nombre del archivo con fecha actual
+    filename = f"Stores_{timezone.now().strftime('%Y%m%d_%H%M%S')}.csv"
+
+    # Configurar la respuesta HTTP como descarga de archivo CSV
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+    # Encabezados del CSV
+    writer.writerow([
+        "Código",
+        "Nombre",
+        "Dirección",
+        "Ciudad",
+        "Estado",
+        "Código Postal",
+        "Teléfono",
+        "Email",
+        "Descripción",
+        "Latitud",
+        "Longitud",
+        "Categoría",
+        "Creado por",
+        "Fecha de creación",
+        "Fecha de modificación",
+        "Proyecto",
+    ])
+
+    # Obtener las tiendas (puedes agregar filtros según el rol)
+    stores = Stores.objects.select_related('cat_id').all().order_by('id')
+
+    # Escribir filas
+    for store in stores:
+        writer.writerow([
+            store.code,
+            store.name,
+            store.address or "",
+            store.city or "",
+            store.city.state or "",
+            store.zip_code or "",
+            store.telephone or "",
+            store.email or "",
+            store.description or "",
+            store.latitude or "",
+            store.longitude or "",
+            store.cat_id.cat_name if store.cat_id else "",
+            store.created_by or "",
+            store.created.strftime("%Y-%m-%d %H:%M:%S") if store.created else "",
+            store.modified.strftime("%Y-%m-%d %H:%M:%S") if store.modified else "",
+            "Banco Rural",
+        ])
+
+    return response

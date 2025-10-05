@@ -44,7 +44,7 @@
                                 {% endif %}
                             <td>
                                 <a href="{% url 'edit_user' user.id %}" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil-square"></i></a>
-                                <a href="{% url 'edit_user' user.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-key-fill"></i></a>
+                                <a href="{% url 'reset_user_password' user.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-key-fill"></i></a>
                                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{ user.id }}')"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>

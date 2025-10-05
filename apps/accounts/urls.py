@@ -10,4 +10,6 @@ urlpatterns = [
     path("users/create/", accounts.create_user, name="create_user"),
     path("users/<int:user_id>/edit/", accounts.edit_user, name="edit_user"),
     path("users/<int:user_id>/delete/", accounts.delete_user, name="delete_user"),
+    path('users/<int:user_id>/reset-password/', accounts.reset_user_password, name='reset_user_password'),
+
 ]

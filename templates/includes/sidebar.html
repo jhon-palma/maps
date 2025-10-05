@@ -79,7 +79,7 @@
               </li>
                 {% if request.user.role == "admin"%}
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{% url 'maps:reports' %}" class="nav-link {% if current_url in 'reports' %}active{% endif %}">
                         <i class="nav-icon bi-file-bar-graph-fill"></i>
                         <p>Reportes</p>
                         </a>

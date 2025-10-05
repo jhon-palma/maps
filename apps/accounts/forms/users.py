@@ -33,3 +33,22 @@ class AdminUserChangeForm(UserChangeForm):
             'role': forms.Select(attrs={"class": "form-control"}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+class AdminPasswordResetForm(SetPasswordForm):
+    """
+    Formulario para que un admin cambie la contraseña de otro usuario.
+    """
+    class Meta:
+        model = CustomUser
+        fields = ['new_password1', 'new_password2']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['new_password1'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Nueva contraseña',
+        })
+        self.fields['new_password2'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Confirmar contraseña',
+        })
