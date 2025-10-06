@@ -20,7 +20,6 @@ config/settings/local.py
 # Archivos de compilación de estáticos
 # Ignora los estáticos compilados en producción si usas un framework de front-end
 # Por defecto, Django recomienda subir los archivos estáticos colectados
-/static/
 
 # Archivos multimedia subidos por los usuarios
 # Asegúrate de que este directorio exista y que Django lo use
