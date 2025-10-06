@@ -21,33 +21,34 @@ BASE_DIR = os.path.join(local.BASE_DIR, 'deploy/json')
 
 def insert_data():
 
-    # with open(os.path.join(BASE_DIR, 'state.json'), encoding='utf8') as json_file:
-    #     for item in json.load(json_file):
-    #         state = State()
-    #         state.code = item['code']
-    #         state.name = item['name']
-    #         state.iso_code = item['iso_code']
-    #         state.save()
+    with open(os.path.join(BASE_DIR, 'state.json'), encoding='utf8') as json_file:
+        for item in json.load(json_file):
+            state = State()
+            state.code = item['code']
+            state.name = item['name']
+            state.iso_code = item['iso_code']
+            state.save()
 
-    # with open(os.path.join(BASE_DIR, 'cities.json'), encoding='utf8') as json_file:
-    #     for item in json.load(json_file):
-    #         city = City()
-    #         city.state = State.objects.get_or_create(name=item['state'])[0]
-    #         # city.code = item['code']
-    #         city.name = item['name']
-    #         city.save()
+    with open(os.path.join(BASE_DIR, 'cities.json'), encoding='utf8') as json_file:
+        for item in json.load(json_file):
+            city = City()
+            city.state = State.objects.get_or_create(name=item['state'])[0]
+            # city.code = item['code']
+            city.name = item['name']
+            city.save()
 
-    # with open(os.path.join(BASE_DIR, 'categories.json'), encoding='utf8') as json_file:
-    #     for item in json.load(json_file):
-    #         category = Categories()
-    #         category.cat_name = item['cat_name']
-    #         category.save()
+    with open(os.path.join(BASE_DIR, 'categories.json'), encoding='utf8') as json_file:
+        for item in json.load(json_file):
+            category = Categories()
+            category.cat_name = item['cat_name']
+            category.save()
 
-    # with open(os.path.join(BASE_DIR, 'projects.json'), encoding='utf8') as json_file:
-    #     for item in json.load(json_file):
-    #         project = Project()
-    #         project.project_name = item['project_name']
-    #         project.save()
+    with open(os.path.join(BASE_DIR, 'projects.json'), encoding='utf8') as json_file:
+        for item in json.load(json_file):
+            project = Project()
+            project.project_name = item['project_name']
+            project.save()
+    
     # logging.basicConfig(filename='import_errors.log', level=logging.ERROR)
 
     # with open(os.path.join(BASE_DIR, 'stores.json'), encoding='utf8') as json_file:
@@ -107,15 +108,15 @@ def insert_data():
     #             # También puedes imprimir el error si lo deseas ver directamente en la consola
     #             print(f"Error al procesar la tienda {item.get('name', 'Desconocida')}: {e}")
     
-    with open(os.path.join(BASE_DIR, 'stores_projects.json'), encoding='utf8') as json_file:
-        for item in json.load(json_file):
-            try:
-                store_project = StoreProject()
-                store_project.project = Project.objects.get(id=item["project_id"])
-                store_project.store = Stores.objects.get(id=item["store_id"])
-                store_project.save()
-            except Exception as e:
-                # Capturamos el error y lo registramos en el log
-                # También puedes imprimir el error si lo deseas ver directamente en la consola
-                print(f"Error al procesar la tienda {item.get('name', 'Desconocida')}: {e}")
+    # with open(os.path.join(BASE_DIR, 'stores_projects.json'), encoding='utf8') as json_file:
+    #     for item in json.load(json_file):
+    #         try:
+    #             store_project = StoreProject()
+    #             store_project.project = Project.objects.get(id=item["project_id"])
+    #             store_project.store = Stores.objects.get(id=item["store_id"])
+    #             store_project.save()
+    #         except Exception as e:
+    #             # Capturamos el error y lo registramos en el log
+    #             # También puedes imprimir el error si lo deseas ver directamente en la consola
+    #             print(f"Error al procesar la tienda {item.get('name', 'Desconocida')}: {e}")
 insert_data()
