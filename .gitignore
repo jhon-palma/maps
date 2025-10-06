@@ -29,6 +29,10 @@ config/settings/local.py
 # Archivos de macOS
 .DS_Store
 
+# Settings locales (solo para desarrollo)
+config/settings/local.py
+config/settings/production.py
+
 # Archivos de pruebas y reportes
 .coverage
 .pytest_cache/

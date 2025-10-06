@@ -5,11 +5,15 @@ def role_required(allowed_roles=[]):
     """
     Decorador para restringir acceso según el rol del usuario.
     Redirige a 'login' si no está autenticado o a 'sin_permiso' si no tiene acceso.
+    Si es superusuario, el acceso es permitido sin importar el rol.
     """
     def decorator(view_func):
         def _wrapped_view(request, *args, **kwargs):
             if not request.user.is_authenticated:
                 return redirect("login")  # o la ruta que uses para login
+
+            if request.user.is_superuser:
+                return view_func(request, *args, **kwargs)
 
             if request.user.role not in allowed_roles:
                 # Puedes redirigir o lanzar un error 403
