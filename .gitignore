@@ -37,3 +37,5 @@ config/settings/production.py
 .coverage
 .pytest_cache/
 htmlcov/
+maps.sock
+*.sock
