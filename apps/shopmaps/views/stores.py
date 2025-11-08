@@ -112,7 +112,10 @@ def store_create(request):
             print("FILES:", request.FILES)  
             print("FILES list:", request.FILES.getlist('images'))
             with transaction.atomic():
-                store = form.save()
+                store = form.save(commit=False)
+                store.created_by = request.user
+                store.save()
+
                 for project in form.cleaned_data['projects']:
                     StoreProject.objects.create(store=store, project=project)
 
@@ -165,7 +168,9 @@ def store_edit(request, pk):
         
         if form.is_valid() and formset.is_valid():
             with transaction.atomic():
-                store = form.save()
+                store = form.save(commit=False)
+                store.updated_by = request.user
+                store.save()
                 formset.save()
             
             return redirect('maps:stores_list')
